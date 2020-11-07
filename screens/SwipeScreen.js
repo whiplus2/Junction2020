@@ -179,7 +179,7 @@ export default class SwipeScreen extends React.Component {
             <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
             </Animated.View>
-            <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}>
+            <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover' }}>
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
                 source={item.imageURL}
@@ -202,7 +202,7 @@ export default class SwipeScreen extends React.Component {
             <Animated.View style={{ opacity: 0, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
             </Animated.View>
-            <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}>
+            <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}>
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
                 source={item.imageURL}
@@ -221,15 +221,20 @@ export default class SwipeScreen extends React.Component {
       <View style={{ flex: 1 }}>
         <View style={{ height: 60 }}>
         </View>
-        <View style={{ flex: 1 }}>
-          {this.state.cards.length <= 0 ? (
-            <View style={[styles.container, styles.horizontal]}>
-              <ActivityIndicator size="large" color="#00ff00" />
-            </View>
-          ) : (
-            this.renderCards()
-          )}      
+        <View style={{ flex: 1}}>
+          {this.renderUsers()}
         </View>
+        <View style={styles.buttonSection}>
+            <TouchableOpacity>
+              <Image source={'./assets/dislike.png'} style={styles.button}/>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={'./assets/superlike.png'} style={styles.button}/>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={'./assets/like.png'} style={styles.button}/>
+            </TouchableOpacity>
+          </View>
         <View style={{ height: 60 }}>
         </View>
       </View>
@@ -253,11 +258,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   desctiprion: {
-    // backgroundColor: 'black',
     width: screenWidth-60,
     height: 120,
     position: 'absolute',
     marginHorizontal: 20,
     marginTop: screenHeight*0.5,
+  },
+  buttonSection: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  button: {
+    height: 64,
+    width: 64,
+    borderRadius: 32,
+    backgroundColor: 'red',
+    marginHorizontal: 4,
   }
 });
