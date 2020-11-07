@@ -51,11 +51,10 @@ const styles = StyleSheet.create({
     mapStyle: {
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
-      zIndex:1,
     },
     button: {
-      top: 0,
-      left: 0,
+      top: 36,
+      left: 16,
       height: 56,
       width: 56,
       position:'absolute',
