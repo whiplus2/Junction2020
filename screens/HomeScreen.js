@@ -25,10 +25,12 @@ export default class HomeScreen extends React.Component {
     let location = await Location.getCurrentPositionAsync({})
     this.setState({ location: location })
   }
+
   showSwipeScreen = (type) => {
     const { navigation } = this.props
     navigation.navigate('Swipe', {Swipe: {type: type}})
   }
+
   render() {
     return (
       <View style={styles.container}>

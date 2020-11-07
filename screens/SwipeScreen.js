@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import axios from 'axios';
 
-const API_ENDPOINT = 'http://192.168.1.8:8080/invoice.js'
+const API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amazonaws.com/dev/places/?limit=10&offset=0'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 export default class SwipeScreen extends React.Component {
@@ -13,11 +13,7 @@ export default class SwipeScreen extends React.Component {
     this.position = new Animated.ValueXY()
     this.state = {
       currentIndex: 0,
-      cards: [
-        { id: "1", uri: require('../assets/restaurants/1.jpg') },
-        { id: "2", uri: require('../assets/restaurants/2.jpg') },
-        { id: "3", uri: require('../assets/restaurants/3.jpg') }
-      ],
+      cards: [],
       likeList: [], // array of placeID ex) ["2103", "4170", "4141"]
       superLikeList: [] // array of placeID ex) ["4141"]
     }
@@ -105,13 +101,41 @@ export default class SwipeScreen extends React.Component {
       .get(API_ENDPOINT, { params: {} })
       .then(results => {
         console.log("HTTP Request succeeded.");
-        console.log(results);
-        this.setState({ cards: results });
+        console.log(results.data.results);
+        var newPlaces = []
+        results.data.results.forEach(place => {
+          var dictionary = {
+            id: place.id,
+            aitoID: place.aito_id,
+            latitude: place.latitude,
+            longitude: place.longitude,
+            name: place.name,
+            address: place.address,
+            city: place.city,
+            state: place.state,
+            country: place.country,
+            fax: place.fax,
+            zip: place.zip,
+            alcohol: place.alcohol,
+            smokingArea: place.smoking_area,
+            dressCode: place.dress_code,
+            accessibility: place.accessibility,
+            price: place.price,
+            url: place.url,
+            rambience: place.Rambience,
+            franchise: place.franchise,
+            area: place.area,
+            otherServices: place.other_services,
+            imageURL: require('../assets/restaurants/1.jpg')
+          }
+          newPlaces.push(dictionary)
+        })
+        this.setState({ cards: newPlaces });
       })
       .catch(() => {
         Alert.alert("HTTP Request failed.")
-        // const { navigation } = this.props
-        // navigation.goBack()
+        const { navigation } = this.props
+        navigation.goBack()
       });
   }
 
@@ -158,7 +182,7 @@ export default class SwipeScreen extends React.Component {
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}>
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-                source={item.uri} 
+                source={item.imageURL}
               />
               <View style={styles.desctiprion}>
                 <Text>The Name</Text>
@@ -181,7 +205,7 @@ export default class SwipeScreen extends React.Component {
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}>
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
-                source={item.uri} 
+                source={item.imageURL}
               />
               <View style={styles.desctiprion}>
                 <Text>The Name</Text>

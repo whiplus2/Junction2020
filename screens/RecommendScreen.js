@@ -10,10 +10,17 @@ export default class RecommendScreen extends React.Component {
   componentWillMount() {
   }
 
+  showMapScreen = () => {
+    const { navigation } = this.props
+    navigation.navigate('Map')
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>RecommendScreen</Text>
+        <TouchableOpacity style={{height: 60, width: 120, backgroundColor: "red"}} onPress={() => this.showMapScreen()}>
+
+        </TouchableOpacity>
       </View>
 
     );
