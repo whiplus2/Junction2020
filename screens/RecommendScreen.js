@@ -23,7 +23,7 @@ export default class RecommendScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#550088',
+    backgroundColor: '#f4f1e7',
     alignItems: 'center',
     justifyContent: 'center',
   },
