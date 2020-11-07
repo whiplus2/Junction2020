@@ -6,7 +6,9 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const Users = [
-  { id: "1", uri: require('./assets/adaptive-icon.png') },
+  { id: "1", uri: require('./assets/restaurants/1.jpg') },
+  { id: "2", uri: require('./assets/restaurants/2.jpg') },
+  { id: "3", uri: require('./assets/restaurants/3.jpg') }
 ]
 
 export default class App extends React.Component {
