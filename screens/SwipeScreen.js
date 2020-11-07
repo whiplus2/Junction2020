@@ -163,7 +163,7 @@ export default class SwipeScreen extends React.Component {
   }
 
   renderCards = () => {
-    
+
     return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null
@@ -173,10 +173,10 @@ export default class SwipeScreen extends React.Component {
           <Animated.View
             {...this.PanResponder.panHandlers}
             key={item.id} style={[ this.rotateAndTranslate, styles.swipeScreen ]}>
-            <Animated.View style={{ opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
+            <Animated.View style={{ opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 160, left: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
             </Animated.View>
-            <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
+            <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 160, right: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
             </Animated.View>
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover' }}>
@@ -218,7 +218,7 @@ export default class SwipeScreen extends React.Component {
   }
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={[ styles.container, { flex: 1 }]}>
         <View style={{ height: 60 }}>
         </View>
         <View style={{ flex: 1}}>
@@ -232,13 +232,16 @@ export default class SwipeScreen extends React.Component {
         </View>
         <View style={styles.buttonSection}>
           <TouchableOpacity>
-            <Image source={'./assets/dislike.png'} style={styles.button}/>
+            <Image style={styles.button} source={require('../assets/like.png')}></Image>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Image source={'./assets/superlike.png'} style={styles.button}/>
+            <Image style={styles.button} source={require('../assets/superlike.png')}></Image>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Image source={'./assets/like.png'} style={styles.button}/>
+            <Image style={styles.button} source={require('../assets/dislike.png')}></Image>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image style={styles.menuButton} source={require('../assets/menu.png')}></Image>
           </TouchableOpacity>
         </View>
         <View style={{ height: 60 }}>
@@ -251,10 +254,7 @@ const screenHeight = Dimensions.get('window').height
 const screenWidth = Dimensions.get('window').width
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#f4f1e7',
   },
   swipeScreen: {
     height: screenHeight*0.7,
@@ -271,15 +271,22 @@ const styles = StyleSheet.create({
     marginTop: screenHeight*0.5,
   },
   buttonSection: {
+    marginRight: 32,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   button: {
     height: 64,
     width: 64,
     borderRadius: 32,
-    backgroundColor: 'red',
     marginHorizontal: 4,
+  },
+  menuButton: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    marginHorizontal: 4,
+    marginBottom: 10,
   }
 });
