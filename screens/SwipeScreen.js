@@ -18,7 +18,9 @@ export default class SwipeScreen extends React.Component {
         { id: "1", uri: require('../assets/restaurants/1.jpg') },
         { id: "2", uri: require('../assets/restaurants/2.jpg') },
         { id: "3", uri: require('../assets/restaurants/3.jpg') }
-      ]
+      ],
+      likeList: [], // array of placeID ex) ["2103", "4170", "4141"]
+      superLikeList: [] // array of placeID ex) ["4141"]
     }
 
     this.rotate = this.position.x.interpolate({
@@ -109,6 +111,7 @@ export default class SwipeScreen extends React.Component {
   }
 
   getCards = async () => {
+    const type = this.props.navigation.state.params.Swipe.type
     axios
       .get(API_ENDPOINT, { params: {} })
       .then(results => {
@@ -118,9 +121,32 @@ export default class SwipeScreen extends React.Component {
       })
       .catch(() => {
         Alert.alert("HTTP Request failed.")
-        const { navigation } = this.props
-        navigation.goBack()
+        // const { navigation } = this.props
+        // navigation.goBack()
       });
+  }
+
+  tapLikeButton = () => {
+    const { currentIndex, cards, likeList } = this.state
+    likeList.push(cards[currentIndex].id)
+    this.setState({likeList: likeList})
+
+    // TODO: - Misaki カードを右にスワイプさせて、currentIndexを１つ更新する
+  }
+
+  tapDislikeButton = () => {
+
+    // TODO: - Misaki カードを左にスワイプさせて、currentIndexを１つ更新する
+  }
+
+  tapSuperlikeButton = () => {
+    const { currentIndex, cards, likeList, superLikeList } = this.state
+    likeList.push(cards[currentIndex].id)
+    superLikeList.push(cards[currentIndex].id)
+    this.setState({likeList: likeList})
+    this.setState({superLikeList: superLikeList})
+
+    // TODO: - Misaki カードを右にスワイプさせて、currentIndexを１つ更新する
   }
 
   renderCards = () => {
