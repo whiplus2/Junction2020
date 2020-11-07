@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, ActivityIndicator, Alert } from 'react-native';
+import axios from 'axios';
 
+const API_ENDPOINT = 'http://192.168.1.8:8080/invoice.js'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 
@@ -57,6 +59,7 @@ export default class SwipeScreen extends React.Component {
 
   }
   componentWillMount() {
+    this.getCards()
     this.PanResponder = PanResponder.create({
 
       onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -103,6 +106,21 @@ export default class SwipeScreen extends React.Component {
   showRecommendScreen = () => {
     const { navigation } = this.props
     navigation.navigate('Recommend')
+  }
+
+  getCards = async () => {
+    axios
+      .get(API_ENDPOINT, { params: {} })
+      .then(results => {
+        console.log("HTTP Request succeeded.");
+        console.log(results);
+        this.setState({ cards: results });
+      })
+      .catch(() => {
+        Alert.alert("HTTP Request failed.")
+        const { navigation } = this.props
+        navigation.goBack()
+      });
   }
 
   renderCards = () => {
