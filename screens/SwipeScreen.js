@@ -1,20 +1,25 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, ActivityIndicator, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import axios from 'axios';
+
+const API_ENDPOINT = 'http://192.168.1.8:8080/invoice.js'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
-import Icon from 'react-native-vector-icons/Ionicons'
-const Users = [
-  { id: "1", uri: require('../assets/restaurants/1.jpg') },
-  { id: "2", uri: require('../assets/restaurants/2.jpg') },
-  { id: "3", uri: require('../assets/restaurants/3.jpg') }
-]
 export default class SwipeScreen extends React.Component {
   constructor() {
     super()
     this.position = new Animated.ValueXY()
     this.state = {
-      currentIndex: 0
+      currentIndex: 0,
+      cards: [
+        { id: "1", uri: require('../assets/restaurants/1.jpg') },
+        { id: "2", uri: require('../assets/restaurants/2.jpg') },
+        { id: "3", uri: require('../assets/restaurants/3.jpg') }
+      ],
+      likeList: [], // array of placeID ex) ["2103", "4170", "4141"]
+      superLikeList: [] // array of placeID ex) ["4141"]
     }
     this.rotate = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -50,6 +55,7 @@ export default class SwipeScreen extends React.Component {
     })
   }
   componentWillMount() {
+    this.getCards()
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
@@ -84,7 +90,7 @@ export default class SwipeScreen extends React.Component {
     })
   }
   componentDidUpdate(prevProps, prevState) {
-    if (Users.length <= this.state.currentIndex) {
+    if (this.state.cards.length <= this.state.currentIndex) {
       this.showRecommendScreen()
     }
   }
@@ -92,8 +98,49 @@ export default class SwipeScreen extends React.Component {
     const { navigation } = this.props
     navigation.navigate('Recommend')
   }
-  renderUsers = () => {
-    return Users.map((item, i) => {
+
+  getCards = async () => {
+    const type = this.props.navigation.state.params.Swipe.type
+    axios
+      .get(API_ENDPOINT, { params: {} })
+      .then(results => {
+        console.log("HTTP Request succeeded.");
+        console.log(results);
+        this.setState({ cards: results });
+      })
+      .catch(() => {
+        Alert.alert("HTTP Request failed.")
+        // const { navigation } = this.props
+        // navigation.goBack()
+      });
+  }
+
+  tapLikeButton = () => {
+    const { currentIndex, cards, likeList } = this.state
+    likeList.push(cards[currentIndex].id)
+    this.setState({likeList: likeList})
+
+    // TODO: - Misaki カードを右にスワイプさせて、currentIndexを１つ更新する
+  }
+
+  tapDislikeButton = () => {
+
+    // TODO: - Misaki カードを左にスワイプさせて、currentIndexを１つ更新する
+  }
+
+  tapSuperlikeButton = () => {
+    const { currentIndex, cards, likeList, superLikeList } = this.state
+    likeList.push(cards[currentIndex].id)
+    superLikeList.push(cards[currentIndex].id)
+    this.setState({likeList: likeList})
+    this.setState({superLikeList: superLikeList})
+
+    // TODO: - Misaki カードを右にスワイプさせて、currentIndexを１つ更新する
+  }
+
+  renderCards = () => {
+
+    return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null
       }
@@ -151,10 +198,13 @@ export default class SwipeScreen extends React.Component {
         <View style={{ height: 60 }}>
         </View>
         <View style={{ flex: 1 }}>
-          {this.renderUsers()}
-          <TouchableOpacity></TouchableOpacity>
-          <TouchableOpacity></TouchableOpacity>
-          <TouchableOpacity></TouchableOpacity>
+          {this.state.cards.length <= 0 ? (
+            <View style={[styles.container, styles.horizontal]}>
+              <ActivityIndicator size="large" color="#00ff00" />
+            </View>
+          ) : (
+            this.renderCards()
+          )}      
         </View>
         <View style={{ height: 60 }}>
         </View>

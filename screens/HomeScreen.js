@@ -1,10 +1,29 @@
 import React from 'react';
 import { StyleSheet, Text, Dimensions, View, TouchableOpacity, Image} from 'react-native';
+import * as Location from 'expo-location';
+
+const SCREEN_WIDTH = Dimensions.get('window').width
+
 export default class HomeScreen extends React.Component {
+
+  state = {
+    location: null
+  }
+
   constructor() {
     super()
   }
   componentWillMount() {
+    this.requestLocation()
+  }
+
+  requestLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync()
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied')
+    }
+    let location = await Location.getCurrentPositionAsync({})
+    this.setState({ location: location })
   }
   showSwipeScreen = (type) => {
     const { navigation } = this.props
