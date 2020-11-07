@@ -139,7 +139,7 @@ export default class SwipeScreen extends React.Component {
   }
 
   renderCards = () => {
-
+    
     return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null
@@ -198,19 +198,25 @@ export default class SwipeScreen extends React.Component {
         <View style={{ height: 60 }}>
         </View>
         <View style={{ flex: 1}}>
-          {this.renderUsers()}
+          {this.state.cards.length <= 0 ? (
+              <View style={[styles.container, styles.horizontal]}>
+                <ActivityIndicator size="large" color="#00ff00" />
+              </View>
+            ) : (
+              this.renderCards()
+            )}      
         </View>
         <View style={styles.buttonSection}>
-            <TouchableOpacity>
-              <Image source={'./assets/dislike.png'} style={styles.button}/>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image source={'./assets/superlike.png'} style={styles.button}/>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image source={'./assets/like.png'} style={styles.button}/>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity>
+            <Image source={'./assets/dislike.png'} style={styles.button}/>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={'./assets/superlike.png'} style={styles.button}/>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={'./assets/like.png'} style={styles.button}/>
+          </TouchableOpacity>
+        </View>
         <View style={{ height: 60 }}>
         </View>
       </View>
