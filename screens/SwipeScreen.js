@@ -127,7 +127,6 @@ export default class SwipeScreen extends React.Component {
         this.position.setValue({ x: 0, y: 0 })
       })
     })
-    // TODO: - Misaki カードを右にスワイプさせて、currentIndexを１つ更新する
   }
 
   tapDislikeButton = () => {
@@ -138,7 +137,6 @@ export default class SwipeScreen extends React.Component {
         this.position.setValue({ x: 0, y: 0 })
       })
     })
-    // TODO: - Misaki カードを左にスワイプさせて、currentIndexを１つ更新する
   }
 
   tapSuperlikeButton = () => {
@@ -147,8 +145,13 @@ export default class SwipeScreen extends React.Component {
     superLikeList.push(cards[currentIndex].id)
     this.setState({likeList: likeList})
     this.setState({superLikeList: superLikeList})
-
-    // TODO: - Misaki カードを右にスワイプさせて、currentIndexを１つ更新する
+    Animated.spring(this.position, {
+      toValue: { x: SCREEN_WIDTH + 100, y: 0 }
+    }).start(() => {
+      this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+        this.position.setValue({ x: 0, y: 0 })
+      })
+    })
   }
 
   renderCards = () => {
@@ -223,7 +226,7 @@ export default class SwipeScreen extends React.Component {
           <TouchableOpacity onPress={() => this.tapDislikeButton()}>
               <Image style={styles.button} source={require('../assets/dislike.png')}></Image>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => this.tapSuperlikeButton()}>
             <Image style={styles.button} source={require('../assets/superlike.png')}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.tapLikeButton()}>
