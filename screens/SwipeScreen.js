@@ -1,15 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, ActivityIndicator } from 'react-native';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
-import Icon from 'react-native-vector-icons/Ionicons'
-
-const Users = [
-  { id: "1", uri: require('../assets/restaurants/1.jpg') },
-  { id: "2", uri: require('../assets/restaurants/2.jpg') },
-  { id: "3", uri: require('../assets/restaurants/3.jpg') }
-]
 
 export default class SwipeScreen extends React.Component {
 
@@ -18,7 +11,12 @@ export default class SwipeScreen extends React.Component {
 
     this.position = new Animated.ValueXY()
     this.state = {
-      currentIndex: 0
+      currentIndex: 0,
+      cards: [
+        { id: "1", uri: require('../assets/restaurants/1.jpg') },
+        { id: "2", uri: require('../assets/restaurants/2.jpg') },
+        { id: "3", uri: require('../assets/restaurants/3.jpg') }
+      ]
     }
 
     this.rotate = this.position.x.interpolate({
@@ -97,7 +95,7 @@ export default class SwipeScreen extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (Users.length <= this.state.currentIndex) {
+    if (this.state.cards.length <= this.state.currentIndex) {
       this.showRecommendScreen()
     }
   }
@@ -107,11 +105,9 @@ export default class SwipeScreen extends React.Component {
     navigation.navigate('Recommend')
   }
 
-  renderUsers = () => {
+  renderCards = () => {
 
-    return Users.map((item, i) => {
-
-
+    return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null
       }
@@ -171,16 +167,18 @@ export default class SwipeScreen extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <View style={{ height: 60 }}>
-
         </View>
         <View style={{ flex: 1 }}>
-          {this.renderUsers()}
+          {this.state.cards.length <= 0 ? (
+            <View style={[styles.container, styles.horizontal]}>
+              <ActivityIndicator size="large" color="#00ff00" />
+            </View>
+          ) : (
+            this.renderCards()
+          )}      
         </View>
         <View style={{ height: 60 }}>
-
         </View>
-
-
       </View>
 
     );
