@@ -58,6 +58,7 @@ export default class SwipeScreen extends React.Component {
         this.position.setValue({ x: gestureState.dx, y: gestureState.dy })
       },
       onPanResponderRelease: (evt, gestureState) => {
+        console.log(gestureState.dy)
         if (gestureState.dx > 120) {
           Animated.spring(this.position, {
             toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
@@ -143,12 +144,24 @@ export default class SwipeScreen extends React.Component {
     const { currentIndex, cards, likeList } = this.state
     likeList.push(cards[currentIndex].id)
     this.setState({likeList: likeList})
-
+    Animated.spring(this.position, {
+      toValue: { x: SCREEN_WIDTH + 100, y: 0 }
+    }).start(() => {
+      this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+        this.position.setValue({ x: 0, y: 0 })
+      })
+    })
     // TODO: - Misaki カードを右にスワイプさせて、currentIndexを１つ更新する
   }
 
   tapDislikeButton = () => {
-
+    Animated.spring(this.position, {
+      toValue: { x: -SCREEN_WIDTH - 100, y: 0 }
+    }).start(() => {
+      this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+        this.position.setValue({ x: 0, y: 0 })
+      })
+    })
     // TODO: - Misaki カードを左にスワイプさせて、currentIndexを１つ更新する
   }
 
@@ -231,14 +244,14 @@ export default class SwipeScreen extends React.Component {
             )}      
         </View>
         <View style={styles.buttonSection}>
-          <TouchableOpacity>
-            <Image style={styles.button} source={require('../assets/like.png')}></Image>
+          <TouchableOpacity onPress={() => this.tapDislikeButton()}>
+              <Image style={styles.button} source={require('../assets/dislike.png')}></Image>
           </TouchableOpacity>
           <TouchableOpacity>
             <Image style={styles.button} source={require('../assets/superlike.png')}></Image>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Image style={styles.button} source={require('../assets/dislike.png')}></Image>
+          <TouchableOpacity onPress={() => this.tapLikeButton()}>
+            <Image style={styles.button} source={require('../assets/like.png')}></Image>
           </TouchableOpacity>
           <TouchableOpacity>
             <Image style={styles.menuButton} source={require('../assets/menu.png')}></Image>
