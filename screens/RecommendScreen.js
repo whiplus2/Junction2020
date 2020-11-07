@@ -4,21 +4,55 @@ import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, Touc
 export default class RecommendScreen extends React.Component {
 
   state = {
+    // type -> 0: like, 1: superlike
     dummyData: [
       {
-        id: '0',
-        image: './assets/restaurant/1.jpg',
+        id: 0,
+        url: 'https://tblg.k-img.com/resize/660x370c/restaurant/images/Rvw/90142/90142210.jpg?token=89a2c16&api=v2',
         title: 'First Item',
+        type: 1,
+        socket: true,
+        wifi: true,
       },
       {
-        id: '1',
-        image: './assets/restaurant/2.jpg',
+        id: 1,
+        url: 'https://tblg.k-img.com/resize/660x370c/restaurant/images/Rvw/90142/90142210.jpg?token=89a2c16&api=v2',
         title: 'Second Item',
+        type: 1,
+        socket: true,
+        wifi: true,
       },
       {
-        id: '2',
-        image: './assets/restaurant/3.jpg',
+        id: 2,
+        url: 'https://tblg.k-img.com/resize/660x370c/restaurant/images/Rvw/90142/90142210.jpg?token=89a2c16&api=v2',
         title: 'Third Item',
+        type: 0,
+        socket: false,
+        wifi: false,
+      },
+      {
+        id: 3,
+        url: 'https://tblg.k-img.com/resize/660x370c/restaurant/images/Rvw/90142/90142210.jpg?token=89a2c16&api=v2',
+        title: 'First Item',
+        type: 0,
+        socket: true,
+        wifi: true,
+      },
+      {
+        id: 4,
+        url: 'https://tblg.k-img.com/resize/660x370c/restaurant/images/Rvw/90142/90142210.jpg?token=89a2c16&api=v2',
+        title: 'Second Item',
+        type: 0,
+        socket: true,
+        wifi: true,
+      },
+      {
+        id: 5,
+        url: 'https://tblg.k-img.com/resize/660x370c/restaurant/images/Rvw/90142/90142210.jpg?token=89a2c16&api=v2',
+        title: 'Third Item',
+        type: 0,
+        socket: false,
+        wifi: false,
       },
     ]
   } 
@@ -31,11 +65,30 @@ export default class RecommendScreen extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    <TouchableOpacity style={styles.listItem}>
-      <View>
-        <Image source={{uri: item.image}} />
-      </View>
-    </TouchableOpacity>
+    return (
+      <TouchableOpacity style={styles.listItem}>
+        <Image source={{uri: item.url}} style={styles.listImage}/>
+        <Text style={styles.text}>{item.title}</Text>
+        {item.type == 0 &&
+          <Image source={require('../assets/like.png')} style={styles.typeIcon}/>
+        }
+        {item.type == 1 &&
+          <Image source={require('../assets/superlike.png')} style={styles.typeIcon}/>
+        }
+        {item.socket == true &&
+          <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
+        }
+        {item.socket == false &&
+          <Image source={require('../assets/socket_false.png')} style={styles.socketIcon}/>
+        }
+        {item.wifi == true &&
+          <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
+        }
+        {item.wifi == false &&
+          <Image source={require('../assets/wifi_false.png')} style={styles.wifiIcon}/>
+        }
+      </TouchableOpacity>
+    )
   }
 
   render() {
@@ -45,10 +98,12 @@ export default class RecommendScreen extends React.Component {
         <FlatList
           style={styles.flatList}
           data={dummyData}
-          keyExtractor={[item => item.id]}
-          numColumns={2}
           renderItem={this.renderItem}
+          keyExtractor={item => item.id}
         />
+        <TouchableOpacity>
+        <Image source={require('../assets/viewmap.png')}/>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }
@@ -66,11 +121,49 @@ const styles = StyleSheet.create({
   flatList: {
     height: screenHeight,
     width: screenWidth,
-    backgroundColor: 'red'
+    padding: 16,
+    marginTop: 40,
+    marginBottom: 16,
   },
   listItem: {
-    width: screenWidth,
-    height: 48,
+    marginVertical: 10,
+    backgroundColor: 'white'
+  },
+  listImage: {
+    height: 132,
+    backgroundColor: 'white'
+  },
+  text: {
+    position: 'absolute',
+    paddingTop: 40,
+    paddingLeft: 16,
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  typeIcon: {
+    height: 24,
+    width: 24,
+    position: 'absolute',
+    marginTop: 102, 
+    marginLeft: 16, 
+  },
+  socketIcon: {
+    height: 22,
+    width: 22,
+    borderRadius: 11,
+    position: 'absolute',
+    marginTop: 102, 
+    marginLeft: screenWidth-100,
+    backgroundColor: 'white'
+  },
+  wifiIcon: {
+    height: 22,
+    width: 22,
+    borderRadius: 11,
+    position: 'absolute',
+    marginTop: 102, 
+    marginLeft: screenWidth-64,
     backgroundColor: 'white'
   }
 });

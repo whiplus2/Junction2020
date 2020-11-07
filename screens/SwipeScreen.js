@@ -197,7 +197,7 @@ export default class SwipeScreen extends React.Component {
             </Animated.View>
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover' }}>
               <Image
-                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}
                 source={item.imageURL}
               />
               <View style={styles.desctiprion}>
@@ -220,7 +220,7 @@ export default class SwipeScreen extends React.Component {
             </Animated.View>
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}>
               <Image
-                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}
                 source={item.imageURL}
               />
               <View style={styles.desctiprion}>
