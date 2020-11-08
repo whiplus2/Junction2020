@@ -36,11 +36,29 @@ class PlaceViewSet(ModelViewSet):
         query_type = queries.get("type", "Mexican")
 
         limit = int(queries.get("limit", 0))
+        user_id = queries.get("userID")
+
+        wh = {
+            "placeID.cuisine": query_type,
+        }
+        if user_id:
+            like_places = list(map(lambda t: {"placeID": t}, UserLike.objects.exclude(user_id=user_id).values_list("place__aito_id", flat=True)))
+            if like_places:
+                query = {
+                    "from": "ratings",
+                    "where": {
+                        "$and": like_places
+                    },
+                }
+                res = aito_api.generic_query(client=client, query=query)
+                user_ids = py_.map(res["hits"], "userID")
+                wh["userID"] = {
+                    "$and": user_ids
+                }
+
         rec_query = {
             "from": "ratings",
-            "where": {
-                "placeID.cuisine": query_type,
-            },
+            "where": wh,
             "recommend": "placeID",
             "goal": {"rating": 2},
         }
