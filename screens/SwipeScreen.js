@@ -105,7 +105,6 @@ export default class SwipeScreen extends React.Component {
       .get(GETLIST_API_ENDPOINT, { params: {limit:10, offset:0} })
       .then(results => {
         console.log("HTTP Request succeeded.");
-        console.log(results.data.results);
         var newPlaces = []
         results.data.results.forEach(place => {
           var dictionary = {
