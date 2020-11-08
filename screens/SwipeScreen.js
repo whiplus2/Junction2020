@@ -201,7 +201,9 @@ export default class SwipeScreen extends React.Component {
                 source={item.imageURL}
               />
               <View style={styles.desctiprion}>
-                <Text>The Name</Text>
+                <Text style={styles.text}>The Name</Text>
+                <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
+                <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
               </View>
             </View> 
           </Animated.View>
@@ -224,7 +226,9 @@ export default class SwipeScreen extends React.Component {
                 source={item.imageURL}
               />
               <View style={styles.desctiprion}>
-                <Text>The Name</Text>
+                <Text style={styles.text}>The Name</Text>
+                <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
+                <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
               </View>
             </View> 
           </Animated.View>
@@ -280,11 +284,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   desctiprion: {
-    width: screenWidth-60,
-    height: 120,
+    width: screenWidth-64,
+    height: 100,
     position: 'absolute',
-    marginHorizontal: 20,
-    marginTop: screenHeight*0.5,
+    marginLeft: 16,
+    marginTop: screenHeight*0.4,
+    backgroundColor: 'white',
+    opacity: 0.8,
   },
   buttonSection: {
     marginRight: 32,
@@ -298,11 +304,35 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     marginHorizontal: 4,
   },
+  text: {
+    fontSize: 18,
+    fontWeight: '400',
+    marginTop: 16,
+    marginLeft: 16,
+  },
   menuButton: {
     height: 40,
     width: 40,
     borderRadius: 20,
     marginHorizontal: 4,
     marginBottom: 10,
+  },
+  socketIcon: {
+    height: 22,
+    width: 22,
+    borderRadius: 11,
+    position: 'absolute',
+    marginTop: 64, 
+    marginLeft: screenWidth-140,
+    backgroundColor: 'white'
+  },
+  wifiIcon: {
+    height: 22,
+    width: 22,
+    borderRadius: 11,
+    position: 'absolute',
+    marginTop: 64, 
+    marginLeft: screenWidth-100,
+    backgroundColor: 'white'
   }
 });
