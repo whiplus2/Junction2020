@@ -81,7 +81,8 @@ export default class RecommendScreen extends React.Component {
     const { places } = this.state
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.headerText}>Your Picks</Text>   
+        <Text style={styles.headerText}>Your Picks</Text>
+        <View style={{height:12}}></View>
         <FlatList
           style={styles.flatList}
           data={places}
@@ -118,11 +119,12 @@ const styles = StyleSheet.create({
   },
   listItem: {
     marginVertical: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   listImage: {
     height: 132,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderRadius: 8,
   },
   text: {
     position: 'absolute',

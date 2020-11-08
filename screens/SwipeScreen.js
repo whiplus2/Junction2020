@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, ActivityIndicator, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
+import { BlurView } from 'expo-blur';
 
 import axios from 'axios';
 
@@ -221,18 +222,14 @@ export default class SwipeScreen extends React.Component {
             </Animated.View>
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover' }}>
               <Image
-                style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 10 }}
                 source={{uri:item.imageURL}}
               />
-              <View style={styles.desctiprion}>
+              <BlurView intensity={100} style={styles.desctiprion}>
                 <Text style={styles.text}>{cards[i].name}</Text>
-                {item.sockets &&
-                  <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
-                }
-                {item.wifi &&
-                  <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
-                }
-              </View>
+                <Image source={require('../assets/power-small.png')} style={styles.socketIcon}/>
+                <Image source={require('../assets/wifi-small.png')} style={styles.wifiIcon}/>
+              </BlurView>
             </View> 
           </Animated.View>
         )
@@ -250,14 +247,14 @@ export default class SwipeScreen extends React.Component {
             </Animated.View>
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}>
               <Image
-                style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 10 }}
                 source={{uri:item.imageURL}}
               />
-              <View style={styles.desctiprion}>
+              <BlurView intensity={100} style={styles.desctiprion}>
                 <Text style={styles.text}>{cards[i].name}</Text>
-                <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
-                <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
-              </View>
+                <Image source={require('../assets/power-small.png')} style={styles.socketIcon}/>
+                <Image source={require('../assets/wifi-small.png')} style={styles.wifiIcon}/>
+              </BlurView>
             </View> 
           </Animated.View>
         )
@@ -271,7 +268,7 @@ export default class SwipeScreen extends React.Component {
         </View>
         <View style={{ flex: 1}}>
           {this.state.cards.length <= 0 ? (
-              <View style={[styles.container, styles.horizontal]}>
+              <View style={styles.activityIndicator}>
                 <ActivityIndicator size="large" color="#00ff00" />
               </View>
             ) : (
@@ -287,9 +284,6 @@ export default class SwipeScreen extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.tapLikeButton()}>
             <Image style={styles.button} source={require('../assets/like.png')}></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image style={styles.menuButton} source={require('../assets/menu.png')}></Image>
           </TouchableOpacity>
         </View>
         <View style={{ height: 60 }}>
@@ -314,17 +308,18 @@ const styles = StyleSheet.create({
   desctiprion: {
     width: screenWidth-64,
     height: 100,
+    bottom: 20,
     position: 'absolute',
     marginLeft: 16,
     marginTop: screenHeight*0.4,
     backgroundColor: 'white',
     opacity: 0.8,
+    borderRadius: 4,
   },
   buttonSection: {
-    marginRight: 32,
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     height: 64,
@@ -334,9 +329,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: '600',
     marginTop: 16,
     marginLeft: 16,
+    color: "white",
   },
   menuButton: {
     height: 40,
@@ -348,19 +344,21 @@ const styles = StyleSheet.create({
   socketIcon: {
     height: 22,
     width: 22,
-    borderRadius: 11,
     position: 'absolute',
     marginTop: 64, 
     marginLeft: screenWidth-140,
-    backgroundColor: 'white'
   },
   wifiIcon: {
     height: 22,
     width: 22,
-    borderRadius: 11,
     position: 'absolute',
     marginTop: 64, 
     marginLeft: screenWidth-100,
-    backgroundColor: 'white'
+  },
+  activityIndicator: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
