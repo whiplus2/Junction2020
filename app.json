@@ -17,6 +17,8 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.journeycreator.grabaseat",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
