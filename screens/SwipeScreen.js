@@ -226,8 +226,12 @@ export default class SwipeScreen extends React.Component {
               />
               <View style={styles.desctiprion}>
                 <Text style={styles.text}>{cards[i].name}</Text>
-                <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
-                <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
+                {item.sockets &&
+                  <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
+                }
+                {item.wifi &&
+                  <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
+                }
               </View>
             </View> 
           </Animated.View>
