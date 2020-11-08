@@ -103,11 +103,10 @@ export default class SwipeScreen extends React.Component {
   }
 
   getCards = async () => {
-    // const type = this.props.navigation.state.params.Swipe.type
-    const offset = (Random.getRandomBytes(12))[0]%12
-    console.log(offset)
+    const type = this.props.navigation.state.params.Swipe.type
+    console.log(type)
     axios
-      .get(GETLIST_API_ENDPOINT, { params: {limit:10, offset:offset} })
+      .get(GETLIST_API_ENDPOINT, { params: {limit:10, offset:0, type:type} })
       .then(results => {
         console.log("HTTP Request succeeded.");
         var newPlaces = []

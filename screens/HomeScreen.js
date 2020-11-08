@@ -40,15 +40,15 @@ export default class HomeScreen extends React.Component {
             <View>
               <Text style={styles.headerText}>Hey! What do you feel{"\n"}like doing today?</Text>
             </View>
-            <TouchableOpacity onPress={() => this.showSwipeScreen('eat')}>
+            <TouchableOpacity onPress={() => this.showSwipeScreen('')}>
               <Image style={styles.button} source={require('../assets/group1.png')}>
               </Image>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.showSwipeScreen('drink')}>
+            <TouchableOpacity onPress={() => this.showSwipeScreen('Bar')}>
               <Image style={styles.button} source={require('../assets/group2.png')}>
               </Image>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.showSwipeScreen('work')}>
+            <TouchableOpacity onPress={() => this.showSwipeScreen('Cafeteria')}>
               <Image style={styles.button} source={require('../assets/group3.png')}>
               </Image>
             </TouchableOpacity>
