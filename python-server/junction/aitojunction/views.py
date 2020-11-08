@@ -64,7 +64,7 @@ class UserLikeViewSet(ModelViewSet):
         user_id = queries.get("userID")
 
         if user_id is not None:
-            return super().get_queryset().filter(user_id=user_id)
+            return super().get_queryset().filter(user_id=user_id).order_by('-is_super_like')
         else:
             return super().get_queryset()
 

@@ -41,7 +41,7 @@ class Place(models.Model):
 class UserLike(models.Model):
     is_super_like = models.BooleanField()
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
-    user_id = models.IntegerField()
+    user_id = models.CharField(max_length=255)
 
 
 class PaymentAccepts(models.Model):
