@@ -1,10 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, ActivityIndicator, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Constants from 'expo-constants';
+import { BlurView } from 'expo-blur';
 
 import axios from 'axios';
 
-const API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amazonaws.com/dev/places/?limit=10&offset=0'
+const GETLIST_API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amazonaws.com/dev/places/'
+const POSTLIKE_API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amazonaws.com/dev/user-places/like/'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 export default class SwipeScreen extends React.Component {
@@ -63,6 +66,7 @@ export default class SwipeScreen extends React.Component {
           Animated.spring(this.position, {
             toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
           }).start(() => {
+            this.sendLikePlace(0)
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 })
             })
@@ -99,10 +103,9 @@ export default class SwipeScreen extends React.Component {
   getCards = async () => {
     const type = this.props.navigation.state.params.Swipe.type
     axios
-      .get(API_ENDPOINT, { params: {} })
+      .get(GETLIST_API_ENDPOINT, { params: {limit:10, offset:0} })
       .then(results => {
         console.log("HTTP Request succeeded.");
-        console.log(results.data.results);
         var newPlaces = []
         results.data.results.forEach(place => {
           var dictionary = {
@@ -127,7 +130,12 @@ export default class SwipeScreen extends React.Component {
             franchise: place.franchise,
             area: place.area,
             otherServices: place.other_services,
-            imageURL: require('../assets/restaurants/1.jpg')
+            wifi: place.wifi,
+            sockets: place.sockets,
+            workspace: place.workspace,
+            imageURL: place.image_url,
+            distance: place.distance,
+            congestion: place.congestion
           }
           newPlaces.push(dictionary)
         })
@@ -140,9 +148,24 @@ export default class SwipeScreen extends React.Component {
       });
   }
 
+  sendLikePlace = (isSuperLike) => {
+    const { currentIndex, cards } = this.state
+    const placeID = cards[currentIndex].id
+    const userID = Constants.deviceId
+    axios
+      .get(POSTLIKE_API_ENDPOINT, { params: {isSuperLike:isSuperLike, placeID:placeID, userID:userID} }) ///dev/user-places/like/?isSuperLike=1&placeID=161&userID=1234
+      .then(results => {
+        console.log("HTTP Request succeeded.");
+      })
+      .catch(() => {
+        Alert.alert("HTTP Request failed.")
+      });
+  }
+
   tapLikeButton = () => {
     const { currentIndex, cards, likeList } = this.state
     likeList.push(cards[currentIndex].id)
+    this.sendLikePlace(0)
     this.setState({likeList: likeList})
     Animated.spring(this.position, {
       toValue: { x: SCREEN_WIDTH + 100, y: 0 }
@@ -167,6 +190,7 @@ export default class SwipeScreen extends React.Component {
     const { currentIndex, cards, likeList, superLikeList } = this.state
     likeList.push(cards[currentIndex].id)
     superLikeList.push(cards[currentIndex].id)
+    this.sendLikePlace(1)
     this.setState({likeList: likeList})
     this.setState({superLikeList: superLikeList})
     Animated.spring(this.position, {
@@ -180,6 +204,7 @@ export default class SwipeScreen extends React.Component {
 
   renderCards = () => {
 
+    const { cards } = this.state
     return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null
@@ -197,12 +222,14 @@ export default class SwipeScreen extends React.Component {
             </Animated.View>
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover' }}>
               <Image
-                style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}
-                source={item.imageURL}
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 10 }}
+                source={{uri:item.imageURL}}
               />
-              <View style={styles.desctiprion}>
-                <Text>The Name</Text>
-              </View>
+              <BlurView intensity={100} style={styles.desctiprion}>
+                <Text style={styles.text}>{cards[i].name}</Text>
+                <Image source={require('../assets/power-small.png')} style={styles.socketIcon}/>
+                <Image source={require('../assets/wifi-small.png')} style={styles.wifiIcon}/>
+              </BlurView>
             </View> 
           </Animated.View>
         )
@@ -220,12 +247,14 @@ export default class SwipeScreen extends React.Component {
             </Animated.View>
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}>
               <Image
-                style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}
-                source={item.imageURL}
+                style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 10 }}
+                source={{uri:item.imageURL}}
               />
-              <View style={styles.desctiprion}>
-                <Text>The Name</Text>
-              </View>
+              <BlurView intensity={100} style={styles.desctiprion}>
+                <Text style={styles.text}>{cards[i].name}</Text>
+                <Image source={require('../assets/power-small.png')} style={styles.socketIcon}/>
+                <Image source={require('../assets/wifi-small.png')} style={styles.wifiIcon}/>
+              </BlurView>
             </View> 
           </Animated.View>
         )
@@ -239,7 +268,7 @@ export default class SwipeScreen extends React.Component {
         </View>
         <View style={{ flex: 1}}>
           {this.state.cards.length <= 0 ? (
-              <View style={[styles.container, styles.horizontal]}>
+              <View style={styles.activityIndicator}>
                 <ActivityIndicator size="large" color="#00ff00" />
               </View>
             ) : (
@@ -255,9 +284,6 @@ export default class SwipeScreen extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.tapLikeButton()}>
             <Image style={styles.button} source={require('../assets/like.png')}></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image style={styles.menuButton} source={require('../assets/menu.png')}></Image>
           </TouchableOpacity>
         </View>
         <View style={{ height: 60 }}>
@@ -280,17 +306,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   desctiprion: {
-    width: screenWidth-60,
-    height: 120,
+    width: screenWidth-64,
+    height: 100,
+    bottom: 20,
     position: 'absolute',
-    marginHorizontal: 20,
-    marginTop: screenHeight*0.5,
+    marginLeft: 16,
+    marginTop: screenHeight*0.4,
+    backgroundColor: 'white',
+    opacity: 0.8,
+    borderRadius: 4,
   },
   buttonSection: {
-    marginRight: 32,
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     height: 64,
@@ -298,11 +327,38 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     marginHorizontal: 4,
   },
+  text: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 16,
+    marginLeft: 16,
+    color: "white",
+  },
   menuButton: {
     height: 40,
     width: 40,
     borderRadius: 20,
     marginHorizontal: 4,
     marginBottom: 10,
+  },
+  socketIcon: {
+    height: 22,
+    width: 22,
+    position: 'absolute',
+    marginTop: 64, 
+    marginLeft: screenWidth-140,
+  },
+  wifiIcon: {
+    height: 22,
+    width: 22,
+    position: 'absolute',
+    marginTop: 64, 
+    marginLeft: screenWidth-100,
+  },
+  activityIndicator: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });

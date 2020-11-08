@@ -12,7 +12,8 @@ export default class MapScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>      
+      <View style={styles.container}>   
+        <Text style={styles.text}>Your Picks</Text>   
         <MapView
           style={styles.mapStyle}
           initialRegion={{
@@ -31,8 +32,8 @@ export default class MapScreen extends React.Component {
             onPress={()=>alert("click")}
           />
         </MapView>
-        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-          <Image style={styles.button} source={require('../assets/back.png')}>
+        <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={styles.button} >
+          <Image source={require('../assets/back_button.png')}>
           </Image>
         </TouchableOpacity> 
       </View>
@@ -41,23 +42,32 @@ export default class MapScreen extends React.Component {
   }
 }
 
+const screenHeight = Dimensions.get('window').height
+const screenWidth = Dimensions.get('window').width
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundColor: '#f4f1e7',
     },
     mapStyle: {
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
+      height: screenHeight-240,
+      width: screenWidth,
+      marginTop: 16,
+      marginBottom: 120,
+    },
+    text: {
+      fontSize: 24,
+      fontWeight: '600',
+      width: screenWidth-80,
+      textAlign: 'center',
+      marginHorizontal: 40,
+      marginTop: 64,
+      height: 40,
     },
     button: {
-      top: 36,
-      left: 16,
       height: 56,
-      width: 56,
+      width: screenWidth,
+      marginTop: screenHeight-96,
+      marginHorizontal: 32,
       position:'absolute',
-      zIndex: 200,
     },
   });
