@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, ActivityIndicator, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Constants from 'expo-constants';
 
 import axios from 'axios';
 
-const API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amazonaws.com/dev/places/?limit=10&offset=0'
+const GETLIST_API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amazonaws.com/dev/places/'
+const POSTLIKE_API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amazonaws.com/dev/user-places/like/'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 export default class SwipeScreen extends React.Component {
@@ -63,6 +65,7 @@ export default class SwipeScreen extends React.Component {
           Animated.spring(this.position, {
             toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
           }).start(() => {
+            this.sendLikePlace(0)
             this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
               this.position.setValue({ x: 0, y: 0 })
             })
@@ -99,7 +102,7 @@ export default class SwipeScreen extends React.Component {
   getCards = async () => {
     const type = this.props.navigation.state.params.Swipe.type
     axios
-      .get(API_ENDPOINT, { params: {} })
+      .get(GETLIST_API_ENDPOINT, { params: {limit:10, offset:0} })
       .then(results => {
         console.log("HTTP Request succeeded.");
         console.log(results.data.results);
@@ -127,7 +130,12 @@ export default class SwipeScreen extends React.Component {
             franchise: place.franchise,
             area: place.area,
             otherServices: place.other_services,
-            imageURL: require('../assets/restaurants/1.jpg')
+            wifi: place.wifi,
+            sockets: place.sockets,
+            workspace: place.workspace,
+            imageURL: place.image_url,
+            distance: place.distance,
+            congestion: place.congestion
           }
           newPlaces.push(dictionary)
         })
@@ -140,9 +148,24 @@ export default class SwipeScreen extends React.Component {
       });
   }
 
+  sendLikePlace = (isSuperLike) => {
+    const { currentIndex, cards } = this.state
+    const placeID = cards[currentIndex].id
+    const userID = Constants.deviceId
+    axios
+      .get(POSTLIKE_API_ENDPOINT, { params: {isSuperLike:isSuperLike, placeID:placeID, userID:userID} }) ///dev/user-places/like/?isSuperLike=1&placeID=161&userID=1234
+      .then(results => {
+        console.log("HTTP Request succeeded.");
+      })
+      .catch(() => {
+        Alert.alert("HTTP Request failed.")
+      });
+  }
+
   tapLikeButton = () => {
     const { currentIndex, cards, likeList } = this.state
     likeList.push(cards[currentIndex].id)
+    this.sendLikePlace(0)
     this.setState({likeList: likeList})
     Animated.spring(this.position, {
       toValue: { x: SCREEN_WIDTH + 100, y: 0 }
@@ -167,6 +190,7 @@ export default class SwipeScreen extends React.Component {
     const { currentIndex, cards, likeList, superLikeList } = this.state
     likeList.push(cards[currentIndex].id)
     superLikeList.push(cards[currentIndex].id)
+    this.sendLikePlace(1)
     this.setState({likeList: likeList})
     this.setState({superLikeList: superLikeList})
     Animated.spring(this.position, {
@@ -198,7 +222,7 @@ export default class SwipeScreen extends React.Component {
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover' }}>
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}
-                source={item.imageURL}
+                source={{uri:item.imageURL}}
               />
               <View style={styles.desctiprion}>
                 <Text>The Name</Text>
@@ -221,7 +245,7 @@ export default class SwipeScreen extends React.Component {
             <View style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}>
               <Image
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover'}}
-                source={item.imageURL}
+                source={{uri:item.imageURL}}
               />
               <View style={styles.desctiprion}>
                 <Text>The Name</Text>
