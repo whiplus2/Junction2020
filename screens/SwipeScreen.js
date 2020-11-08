@@ -180,6 +180,7 @@ export default class SwipeScreen extends React.Component {
 
   renderCards = () => {
 
+    const { cards } = this.state
     return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null
@@ -201,7 +202,7 @@ export default class SwipeScreen extends React.Component {
                 source={item.imageURL}
               />
               <View style={styles.desctiprion}>
-                <Text style={styles.text}>The Name</Text>
+                <Text style={styles.text}>{cards[i].name}</Text>
                 <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
                 <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
               </View>
@@ -226,7 +227,7 @@ export default class SwipeScreen extends React.Component {
                 source={item.imageURL}
               />
               <View style={styles.desctiprion}>
-                <Text style={styles.text}>The Name</Text>
+                <Text style={styles.text}>{cards[i].name}</Text>
                 <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
                 <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
               </View>
