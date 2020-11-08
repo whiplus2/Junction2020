@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, Dimensions, View, TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, Text, Dimensions, View, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
 import * as Location from 'expo-location';
 
 const SCREEN_WIDTH = Dimensions.get('window').width
@@ -33,28 +33,38 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View>
-          <Text style={styles.headerText}>Hey! What do you feel{"\n"}like doing today?</Text>
-        </View>
-        <TouchableOpacity onPress={() => this.showSwipeScreen('eat')}>
-          <Image style={styles.button} source={require('../assets/group1.png')}>
-          </Image>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.showSwipeScreen('drink')}>
-          <Image style={styles.button} source={require('../assets/group2.png')}>
-          </Image>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.showSwipeScreen('work')}>
-          <Image style={styles.button} source={require('../assets/group3.png')}>
-          </Image>
-        </TouchableOpacity>
-      </View>
+      <SafeAreaView style={styles.whole}>
+        <ScrollView>
+          <View style={styles.container}>
+          <View style={{height:48}}></View>
+            <View>
+              <Text style={styles.headerText}>Hey! What do you feel{"\n"}like doing today?</Text>
+            </View>
+            <TouchableOpacity onPress={() => this.showSwipeScreen('eat')}>
+              <Image style={styles.button} source={require('../assets/group1.png')}>
+              </Image>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.showSwipeScreen('drink')}>
+              <Image style={styles.button} source={require('../assets/group2.png')}>
+              </Image>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.showSwipeScreen('work')}>
+              <Image style={styles.button} source={require('../assets/group3.png')}>
+              </Image>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
 const screenWidth = Dimensions.get('window').width
 const styles = StyleSheet.create({
+  whole: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#f4f1e7',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f4f1e7',
