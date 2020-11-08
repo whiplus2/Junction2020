@@ -95,17 +95,23 @@ export default class RecommendScreen extends React.Component {
     const { dummyData } = this.state
     return (
       <SafeAreaView style={styles.container}>
+        <Text style={styles.headerText}>Your Picks</Text>   
         <FlatList
           style={styles.flatList}
           data={dummyData}
           renderItem={this.renderItem}
           keyExtractor={item => item.id}
         />
-        <TouchableOpacity>
-        <Image source={require('../assets/viewmap.png')}/>
+        <TouchableOpacity onPress={() => this.showMapScreen()}>
+          <Image source={require('../assets/viewmap.png')}/>
         </TouchableOpacity>
       </SafeAreaView>
     );
+  }
+
+  showMapScreen = (type) => {
+    const { navigation } = this.props
+    navigation.navigate('Map')
   }
 }
 
@@ -122,7 +128,6 @@ const styles = StyleSheet.create({
     height: screenHeight,
     width: screenWidth,
     padding: 16,
-    marginTop: 40,
     marginBottom: 16,
   },
   listItem: {
@@ -165,5 +170,11 @@ const styles = StyleSheet.create({
     marginTop: 102, 
     marginLeft: screenWidth-64,
     backgroundColor: 'white'
-  }
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 20,
+  },
 });
