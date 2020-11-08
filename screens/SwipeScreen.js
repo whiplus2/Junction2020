@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, Acti
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import { BlurView } from 'expo-blur';
+import * as Random from 'expo-random';
 
 import axios from 'axios';
 
@@ -10,6 +11,7 @@ const GETLIST_API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amaz
 const POSTLIKE_API_ENDPOINT = 'https://ve6ngjcjpl.execute-api.ap-northeast-2.amazonaws.com/dev/user-places/like/'
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
+
 export default class SwipeScreen extends React.Component {
   constructor() {
     super()
@@ -91,7 +93,7 @@ export default class SwipeScreen extends React.Component {
     })
   }
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.cards.length <= this.state.currentIndex) {
+    if ((prevState.currentIndex !== this.state.currentIndex) && (this.state.cards.length <= this.state.currentIndex)) {
       this.showRecommendScreen()
     }
   }
@@ -101,9 +103,11 @@ export default class SwipeScreen extends React.Component {
   }
 
   getCards = async () => {
-    const type = this.props.navigation.state.params.Swipe.type
+    // const type = this.props.navigation.state.params.Swipe.type
+    const offset = (Random.getRandomBytes(12))[0]%12
+    console.log(offset)
     axios
-      .get(GETLIST_API_ENDPOINT, { params: {limit:10, offset:0} })
+      .get(GETLIST_API_ENDPOINT, { params: {limit:10, offset:offset} })
       .then(results => {
         console.log("HTTP Request succeeded.");
         var newPlaces = []

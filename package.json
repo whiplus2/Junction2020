@@ -14,6 +14,7 @@
     "expo-blur": "~8.2.0",
     "expo-constants": "~9.2.0",
     "expo-location": "~9.0.0",
+    "expo-random": "~9.0.0",
     "expo-status-bar": "~1.0.2",
     "firebase": "7.9.0",
     "react": "16.13.1",
