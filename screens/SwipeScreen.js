@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, Animated, PanResponder, ActivityIndicator, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
+import { BlurView } from 'expo-blur';
 
 import axios from 'axios';
 
@@ -224,15 +225,11 @@ export default class SwipeScreen extends React.Component {
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 10 }}
                 source={{uri:item.imageURL}}
               />
-              <View style={styles.desctiprion}>
+              <BlurView intensity={100} style={styles.desctiprion}>
                 <Text style={styles.text}>{cards[i].name}</Text>
-                {item.sockets &&
-                  <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
-                }
-                {item.wifi &&
-                  <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
-                }
-              </View>
+                <Image source={require('../assets/power-small.png')} style={styles.socketIcon}/>
+                <Image source={require('../assets/wifi-small.png')} style={styles.wifiIcon}/>
+              </BlurView>
             </View> 
           </Animated.View>
         )
@@ -253,11 +250,11 @@ export default class SwipeScreen extends React.Component {
                 style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 10 }}
                 source={{uri:item.imageURL}}
               />
-              <View style={styles.desctiprion}>
+              <BlurView intensity={100} style={styles.desctiprion}>
                 <Text style={styles.text}>{cards[i].name}</Text>
-                <Image source={require('../assets/socket_true.png')} style={styles.socketIcon}/>
-                <Image source={require('../assets/wifi_true.png')} style={styles.wifiIcon}/>
-              </View>
+                <Image source={require('../assets/power-small.png')} style={styles.socketIcon}/>
+                <Image source={require('../assets/wifi-small.png')} style={styles.wifiIcon}/>
+              </BlurView>
             </View> 
           </Animated.View>
         )
@@ -317,6 +314,7 @@ const styles = StyleSheet.create({
     marginTop: screenHeight*0.4,
     backgroundColor: 'white',
     opacity: 0.8,
+    borderRadius: 4,
   },
   buttonSection: {
     flexDirection: 'row',
@@ -331,9 +329,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: '600',
     marginTop: 16,
     marginLeft: 16,
+    color: "white",
   },
   menuButton: {
     height: 40,
@@ -345,20 +344,16 @@ const styles = StyleSheet.create({
   socketIcon: {
     height: 22,
     width: 22,
-    borderRadius: 11,
     position: 'absolute',
     marginTop: 64, 
     marginLeft: screenWidth-140,
-    backgroundColor: 'white'
   },
   wifiIcon: {
     height: 22,
     width: 22,
-    borderRadius: 11,
     position: 'absolute',
     marginTop: 64, 
     marginLeft: screenWidth-100,
-    backgroundColor: 'white'
   },
   activityIndicator: {
     flex: 1,
